@@ -699,7 +699,7 @@ public class InventoryUI extends javax.swing.JFrame {
         Product product=null;
         if(productName.equalsIgnoreCase("LapTop")){
             try{
-                product=inventory.getItemByName("LapTop");
+                product=inventory.getItemByIdFromDb(1);
                 JOptionPane.showMessageDialog(null,"LapTop Detail: " + product.toString());
             }catch(InventoryException e){
                 System.out.println("Exception occured. Exception message is "+ e.toString());
@@ -708,7 +708,7 @@ public class InventoryUI extends javax.swing.JFrame {
            
         }else if(productName.equalsIgnoreCase("Mobile")){
             try{
-                product=inventory.getItemByName("Mobile");
+                product=inventory.getItemByIdFromDb(2);
                 JOptionPane.showMessageDialog(null,"Mobile Detail: " + product.toString());
             }catch(InventoryException e){
                 System.out.println("Exception occured. Exception message is "+ e.toString());
@@ -733,6 +733,7 @@ public class InventoryUI extends javax.swing.JFrame {
                       
             LapTop lapTop = new LapTop(1, productName, Double.parseDouble(price), cpuCore, memoryType, Integer.parseInt(ramSlot), os , hardDisk, brand); 
             inventory.addProduct(lapTop, Integer.parseInt(quantity));
+            inventory.addProductDb(lapTop, Integer.parseInt(quantity));
         }else if(productName.equalsIgnoreCase("Mobile")){
             
             String quantity = jTextField1.getText().trim();
@@ -748,6 +749,7 @@ public class InventoryUI extends javax.swing.JFrame {
                         
             Mobile mobile = new Mobile(2, productName, Double.parseDouble(price), mobileCarrier, deviceModel, "",os, memory, brand, cpuCore);
             inventory.addProduct(mobile, Integer.parseInt(quantity));
+            inventory.addProductDb(mobile, Integer.parseInt(quantity));
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -814,7 +816,7 @@ public class InventoryUI extends javax.swing.JFrame {
             lapTop.setProductid(1);
             lapTop.setName(productName);
             try{
-                inventory.removeProduct(lapTop, Integer.parseInt(quantity));
+                inventory.removeProductDb(lapTop, Integer.parseInt(quantity));
             }catch(InventoryException e){
                 System.out.println("Exception occured. Exception message is "+ e.toString());
                 JOptionPane.showMessageDialog(null,"Exception occured: " + e.toString());
@@ -825,7 +827,7 @@ public class InventoryUI extends javax.swing.JFrame {
             mobile.setProductid(2);
             mobile.setName(productName);
             try{
-                inventory.removeProduct(mobile, Integer.parseInt(quantity));
+                inventory.removeProductDb(mobile, Integer.parseInt(quantity));
             }catch(InventoryException e){
                 JOptionPane.showMessageDialog(null,"Exception occured: " + e.toString());
                 System.out.println("Exception occured. Exception message is "+ e.toString());

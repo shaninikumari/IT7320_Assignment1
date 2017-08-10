@@ -45,7 +45,7 @@ public class Inventory {
 
 	
 	public void addProduct(Product item, int quantity) {
-		dbm.saveProduct(item, quantity);
+		
 		if(!productInventory.containsKey(item.getProductid())){
 			ProductStock productStock = new ProductStock(item, quantity);
 			productInventory.put(item.getProductid(), productStock);
@@ -53,6 +53,20 @@ public class Inventory {
 		}else{
 			productInventory.get(item.getProductid()).addToStock(quantity);
 			productCodeMap.put(item.getName(), item.getProductid());
+		}
+		
+	}
+	
+	public void addProductDb(Product item, int quantity) {
+		
+		if(!dbm.inventoryContainsProduct(new Integer(item.getProductid()).toString())){
+			dbm.saveProduct(item, quantity);
+			
+		}else{
+			int productStockCount=dbm.getProductStockCount(new Integer(item.getProductid()).toString());
+			int totalQuantity=productStockCount+quantity;
+			dbm.updateProductCount(item, totalQuantity);
+			
 		}
 		
 	}
@@ -72,7 +86,7 @@ public class Inventory {
 //-----------------------------------------------------------------------------------------------
 	
 public void removeProduct(Product item, int quantity) throws InventoryException{
-    if(!productInventory.containsKey(item.getProductid())){
+	if(!productInventory.containsKey(item.getProductid())){
             String errorMessage="Product item with product Id: "+ item.getProductid() + " does not exist in inventory," +
                             " so it could not be removed from inventory";
             System.out.println(errorMessage);
@@ -87,6 +101,29 @@ public void removeProduct(Product item, int quantity) throws InventoryException{
                     throw new InventoryException("Inv002", "ProductOutOfStockException", errorMessage);
             }else{
                     productInventory.get(item.getProductid()).removeFromStock(quantity);
+            }
+    }
+
+}
+
+public void removeProductDb(Product item, int quantity) throws InventoryException{
+    if(!dbm.inventoryContainsProduct(new Integer(item.getProductid()).toString())){
+            String errorMessage="Product item with product Id: "+ item.getProductid() + " does not exist in inventory," +
+                            " so it could not be removed from inventory";
+            System.out.println(errorMessage);
+            //throw exception
+            throw new InventoryException("Inv001", "NoSuchProductException", errorMessage);
+    }else{
+            int itemQuantity = dbm.getProductStockCount(new Integer(item.getProductid()).toString());
+            if(quantity>itemQuantity){
+                    String errorMessage="Product item with product Id: "+ item.getProductid() + " exists in inventory," +
+                                    " but its quantity is less than " + quantity+ " so it could not be removed from inventory";
+                    System.out.println(errorMessage);
+                    throw new InventoryException("Inv002", "ProductOutOfStockException", errorMessage);
+            }else{
+            	
+            	int totalQuantity=itemQuantity-quantity;
+    			dbm.updateProductCount(item, totalQuantity);
             }
     }
 
@@ -123,6 +160,29 @@ public Product getItemById(int productid) throws InventoryException{
                         return productInventory.get(productid).getFromStock(1);
                 }
         }
+
+}
+
+public Product getItemByIdFromDb(int productid) throws InventoryException{
+    
+	if(!dbm.inventoryContainsProduct(new Integer(productid).toString())){
+            String errorMessage="Product item with product Id: "+ productid + " does not exist in inventory";
+            System.out.println(errorMessage);
+
+            //throw exception
+            throw new InventoryException("Inv001", "NoSuchProductException", errorMessage);
+    }else{
+            int itemQuantity = dbm.getProductStockCount(new Integer(productid).toString());
+            if(itemQuantity<=0){
+                    String errorMessage="Product inventory is out of stock for product Id: "+ productid;
+                    System.out.println(errorMessage);
+                    //throw exception
+                    throw new InventoryException("Inv002", "ProductOutOfStockException", errorMessage);
+            }else{
+            	return dbm.getProductByProductId(new Integer(productid).toString());
+                    
+            }
+    }
 
 }
 //-----------------------------------------------------------------------------------
