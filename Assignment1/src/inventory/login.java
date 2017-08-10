@@ -39,7 +39,7 @@ public class login extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the frame by Shanini.
 	 */
 	public login() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
