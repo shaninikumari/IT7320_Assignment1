@@ -37,7 +37,7 @@ public class login extends JFrame {
 			}
 		});
 	}
-	//this is comment from nizar
+	//this is comment by Shanini to show conflict
 
 	/**
 	 * Created the frame by Shanini.
