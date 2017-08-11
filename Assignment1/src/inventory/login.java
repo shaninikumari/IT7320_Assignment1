@@ -37,7 +37,7 @@ public class login extends JFrame {
 			}
 		});
 	}
-	//this is comment by Shanini to show conflict
+	//this is comment by Shanini to show conflict.
 
 	/**
 	 * Created the frame by Shanini.
@@ -65,9 +65,9 @@ public class login extends JFrame {
 				if(dbm.authenticateUser( username,  password)){
 					txtPassword.setText(null);
 					txtUserName.setText(null);
-					//InventoryUI inventoryUI = new InventoryUI();
-					//inventoryUI.launchUI();
-					InventoryUI.main(null);
+					InventoryUI inventoryUI = new InventoryUI();
+					inventoryUI.launchUI();
+					//InventoryUI.main(null);
 					setVisible(false);
 				}else{
 					JOptionPane.showMessageDialog(null, "Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
